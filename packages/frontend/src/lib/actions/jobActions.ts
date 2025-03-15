@@ -9,6 +9,7 @@ import {
 	JobSchemaWithTags,
 } from "../db/schemas/jobSchema";
 import { redirect } from "@tanstack/react-router";
+import { authService } from "@/services/AuthService";
 
 type AddJobResponse = {
 	error: string | null;
@@ -67,18 +68,32 @@ export async function addJob(formData: unknown): Promise<AddJobResponse> {
 		)
 		.onConflictDoNothing();
 
-	//revalidatePath("/"); // unsure this can be done
 	return { error: null, data: "Job added" };
 }
 
 export const fetchAllJobs = async () => {
-	const res = await fetch(`http://localhost:8080/jobs`);
+	const token = authService.getToken();
+
+	const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/jobs", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 	if (!res.ok) throw new Error("Failed to fetch jobs");
 	return res.json();
 };
 
 export const fetchJobById = async (id: string) => {
-	const res = await fetch(`http://localhost:8080/jobs/${id}`);
+	const token = authService.getToken();
+
+	const res = await fetch(
+		`${import.meta.env.VITE_BACKEND_URL}/api/jobs/${id}`,
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}
+	);
 	if (!res.ok) throw new Error("Failed to fetch job");
 	return res.json();
 };

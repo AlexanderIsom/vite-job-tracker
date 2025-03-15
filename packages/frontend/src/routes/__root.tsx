@@ -19,7 +19,9 @@ function RootComponent() {
         </div>
       </div>
       <hr />
-      <Outlet />
+      <div className='p-2'>
+        <Outlet />
+      </div>
       <TanStackRouterDevtools position="bottom-right" />
     </>
   )

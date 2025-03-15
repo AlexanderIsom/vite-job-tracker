@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as EditJobIdImport } from './routes/edit/$jobId'
 
 // Create/Update Routes
@@ -19,6 +20,12 @@ import { Route as EditJobIdImport } from './routes/edit/$jobId'
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginIndexRoute = LoginIndexImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditJobIdImport
       parentRoute: typeof rootRoute
     }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/edit/$jobId': typeof EditJobIdRoute
+  '/login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/edit/$jobId': typeof EditJobIdRoute
+  '/login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/edit/$jobId': typeof EditJobIdRoute
+  '/login/': typeof LoginIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/edit/$jobId'
+  fullPaths: '/' | '/edit/$jobId' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/edit/$jobId'
-  id: '__root__' | '/' | '/edit/$jobId'
+  to: '/' | '/edit/$jobId' | '/login'
+  id: '__root__' | '/' | '/edit/$jobId' | '/login/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EditJobIdRoute: typeof EditJobIdRoute
+  LoginIndexRoute: typeof LoginIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EditJobIdRoute: EditJobIdRoute,
+  LoginIndexRoute: LoginIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +116,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/edit/$jobId"
+        "/edit/$jobId",
+        "/login/"
       ]
     },
     "/": {
@@ -105,6 +125,9 @@ export const routeTree = rootRoute
     },
     "/edit/$jobId": {
       "filePath": "edit/$jobId.tsx"
+    },
+    "/login/": {
+      "filePath": "login/index.tsx"
     }
   }
 }

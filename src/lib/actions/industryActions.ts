@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/lib/turso";
+// import { db } from "@/lib/turso";
 import { industryTags } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -11,11 +11,12 @@ export async function createIndustryTag(tagName: string) {
 	// 	return { error: "Not authenticated", data: null };
 	// }
 
-	const result = await db
-		.insert(industryTags)
-		.values({ name: tagName })
-		.returning();
-	return { error: null, data: result[0] };
+	// const result = await db
+	// 	.insert(industryTags)
+	// 	.values({ name: tagName })
+	// 	.returning();
+	// return { error: null, data: result[0] };
+	return { error: null, data: {} };
 }
 
 export async function deleteIndustryTag(id: number) {
@@ -23,8 +24,7 @@ export async function deleteIndustryTag(id: number) {
 	// if (!user) {
 	// 	return { error: "Not authenticated", data: null };
 	// }
-
-	await db.delete(industryTags).where(eq(industryTags.id, id));
+	// await db.delete(industryTags).where(eq(industryTags.id, id));
 }
 
 export async function getIndustryTags() {
@@ -33,5 +33,6 @@ export async function getIndustryTags() {
 	// 	return { error: "Not authenticated", data: null };
 	// }
 
-	return { error: null, data: await db.select().from(industryTags) };
+	// return { error: null, data: await db.select().from(industryTags) };
+	return { error: null, data: {} };
 }

@@ -38,15 +38,9 @@ export const verifyToken = (
 	}
 
 	// Get token from Authorization header
-	const authHeader = req.headers.authorization;
-
-	if (!authHeader || !authHeader.startsWith("Bearer ")) {
-		res.status(401).json({ message: "Access denied. No token provided." });
-		return;
-	}
+	const token = req.cookies["auth_token"];
 
 	try {
-		const token = authHeader.split(" ")[1];
 		// Just verify the token is valid, we don't need to extract any info
 		jwt.verify(token, JWT_SECRET);
 

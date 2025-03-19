@@ -72,25 +72,13 @@ export async function addJob(formData: unknown): Promise<AddJobResponse> {
 }
 
 export const fetchAllJobs = async () => {
-	const token = authService.getToken();
-
-	const res = await fetch("/api/jobs", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+	const res = await fetch("/api/jobs");
 	if (!res.ok) throw new Error("Failed to fetch jobs");
 	return res.json();
 };
 
 export const fetchJobById = async (id: string) => {
-	const token = authService.getToken();
-
-	const res = await fetch(`/api/jobs/${id}`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+	const res = await fetch(`/api/jobs/${id}`);
 	if (!res.ok) throw new Error("Failed to fetch job");
 	return res.json();
 };

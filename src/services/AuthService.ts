@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 interface LoginResponse {
 	success: boolean;
 	token: string;
@@ -38,7 +40,7 @@ class AuthService {
 			const data: LoginResponse = await response.json();
 
 			if (data.success && data.token) {
-				localStorage.setItem(this.tokenKey, data.token);
+				Cookies.set(this.tokenKey, data.token, { expires: 7 });
 				return { success: true };
 			}
 
@@ -56,12 +58,7 @@ class AuthService {
 
 	// Logout
 	logout(): void {
-		localStorage.removeItem(this.tokenKey);
-	}
-
-	// Get the auth token
-	getToken(): string | null {
-		return localStorage.getItem(this.tokenKey);
+		Cookies.remove(this.tokenKey);
 	}
 }
 

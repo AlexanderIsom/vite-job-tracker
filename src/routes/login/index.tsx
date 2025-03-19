@@ -11,12 +11,9 @@ export const Route = createFileRoute('/login/')({
 	component: RouteComponent,
 })
 
-
-
 const formSchema = z.object({
 	password: z.string(),
 })
-
 
 function RouteComponent() {
 	const form = useForm<z.infer<typeof formSchema>>({

@@ -9,7 +9,6 @@ import {
 	JobSchemaWithTags,
 } from "../db/schemas/jobSchema";
 import { redirect } from "@tanstack/react-router";
-import { authService } from "@/services/AuthService";
 
 type AddJobResponse = {
 	error: string | null;

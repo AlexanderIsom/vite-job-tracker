@@ -1,4 +1,3 @@
-// src/routes/user.ts
 import { Request, Response, Router } from "express";
 import { db } from "../db/config";
 import { jobs } from "../db/schema";

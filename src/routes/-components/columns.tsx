@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { JobSchemaWithStaleStatus, JobSchemaWithTags } from "@/lib/db/schemas/jobSchema"
+import { JobSchemaWithStaleStatus, JobSchemaWithTags } from "shared/db/jobSchema"
 import { z } from "zod"
 import { Badge } from "@/components/ui/badge"
 import { Link } from "@tanstack/react-router"

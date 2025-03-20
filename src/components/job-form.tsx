@@ -13,13 +13,13 @@ import { z } from "zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-import { JobSchemaWithTags } from "@/lib/db/schemas/jobSchema";
+import { JobSchemaWithTags } from "../../shared/db/jobSchema";
 import { TagsCombobox } from "./tag-select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { createStackTag, deleteStackTag, getStackTags } from "@/lib/actions/stackActions";
-import { createIndustryTag, deleteIndustryTag, getIndustryTags } from "@/lib/actions/industryActions";
+import { createStackTag, deleteStackTag, fetchStackTags } from "@/lib/actions/stackActions";
+import { createIndustryTag, deleteIndustryTag, fetchIndustryTags } from "@/lib/actions/industryActions";
 
 interface JobFormProps {
 	initialData?: z.infer<typeof JobSchemaWithTags>;
@@ -148,7 +148,7 @@ export default function JobForm({ initialData, onSubmit, onDelete, isSubmitting,
 						<FormItem>
 							<FormLabel>Industry</FormLabel>
 							<FormControl>
-								<TagsCombobox text='industry' value={field.value} onChange={field.onChange} getTags={getIndustryTags} createTag={createIndustryTag} deleteTag={deleteIndustryTag} />
+								<TagsCombobox text='industry' value={field.value} onChange={field.onChange} getTags={fetchIndustryTags} createTag={createIndustryTag} deleteTag={deleteIndustryTag} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -161,7 +161,7 @@ export default function JobForm({ initialData, onSubmit, onDelete, isSubmitting,
 						<FormItem>
 							<FormLabel>Stack</FormLabel>
 							<FormControl>
-								<TagsCombobox text='stack' value={field.value} onChange={field.onChange} getTags={getStackTags} createTag={createStackTag} deleteTag={deleteStackTag} />
+								<TagsCombobox text='stack' value={field.value} onChange={field.onChange} getTags={fetchStackTags} createTag={createStackTag} deleteTag={deleteStackTag} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

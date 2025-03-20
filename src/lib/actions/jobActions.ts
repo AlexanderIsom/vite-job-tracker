@@ -1,14 +1,12 @@
-"use server";
-
-// import { db } from "@/lib/turso";
 import { differenceInDays, startOfDay } from "date-fns";
 import { and, eq, notInArray } from "drizzle-orm";
 import { jobs, jobsToIndustryTable, jobToStackTable } from "../db/schema";
 import {
 	JobSchemaWithStaleStatusType,
 	JobSchemaWithTags,
-} from "../db/schemas/jobSchema";
+} from "../../../shared/db/jobSchema";
 import { redirect } from "@tanstack/react-router";
+import { authorisedFetch, unauthorisedRedirect } from "../fetchUtils";
 
 type AddJobResponse = {
 	error: string | null;
@@ -72,13 +70,19 @@ export async function addJob(formData: unknown): Promise<AddJobResponse> {
 
 export const fetchAllJobs = async () => {
 	const res = await fetch("/api/jobs");
-	if (!res.ok) throw new Error("Failed to fetch jobs");
+	unauthorisedRedirect(res);
+	if (!res.ok) {
+		throw new Error("Failed to fetch jobs");
+	}
 	return res.json();
 };
 
 export const fetchJobById = async (id: string) => {
 	const res = await fetch(`/api/jobs/${id}`);
-	if (!res.ok) throw new Error("Failed to fetch job");
+	unauthorisedRedirect(res);
+	if (!res.ok) {
+		throw new Error("Failed to fetch job");
+	}
 	return res.json();
 };
 
@@ -198,19 +202,6 @@ export async function updateJob(formData: unknown) {
 export async function deleteJob(id: number) {
 	// await db.delete(jobs).where(eq(jobs.id, id));
 	redirect({ to: "/" });
-}
-
-export async function getAllJobsWithStaleStatus() {
-	// const data = await db.select().from(jobs);
-	// const jobsWithStaleStatus = data.map((job) => {
-	// 	const newJob = job as JobSchemaWithStaleStatusType;
-	// 	newJob.stale =
-	// 		differenceInDays(new Date(), startOfDay(newJob.date_applied)) >= 14
-	// 			? "stale"
-	// 			: "fresh";
-	// 	return newJob;
-	// });
-	// return jobsWithStaleStatus;
 }
 
 export async function getJobById(id: number) {

@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "./ui/button";
 import JobForm from "./job-form";
 import { toast } from "sonner"
-import { JobSchema } from "@/lib/db/schemas/jobSchema";
+import { JobSchema } from "shared/db/jobSchema";
 
 
 export default function AddJobDialog({ loading = false }: { loading?: boolean }) {

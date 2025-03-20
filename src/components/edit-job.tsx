@@ -2,7 +2,7 @@
 
 import { JobColumnWithTags } from "@/routes/-components/columns";
 import { deleteJob, updateJob } from "@/lib/actions/jobActions";
-import { JobSchemaWithId } from "@/lib/db/schemas/jobSchema";
+import { JobSchemaWithId } from "shared/db/jobSchema";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";

@@ -6,6 +6,7 @@ import { DataTable } from './-components/data-table';
 export const Route = createFileRoute('/')({
   loader: () => fetchAllJobs(),
   component: HomeComponent,
+  pendingComponent: () => <div>Loading...</div>
 })
 
 function HomeComponent() {

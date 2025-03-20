@@ -1,38 +1,51 @@
 "use server";
 
-// import { db } from "@/lib/turso";
-import { industryTags } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { unauthorisedRedirect } from "../fetchUtils";
 
 export async function createIndustryTag(tagName: string) {
-	// const { user } = await useUser();
+	const response = await fetch("/api/industry-tags/create", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ tagName: tagName }),
+	});
 
-	// if (!user) {
-	// 	return { error: "Not authenticated", data: null };
-	// }
+	unauthorisedRedirect(response);
 
-	// const result = await db
-	// 	.insert(industryTags)
-	// 	.values({ name: tagName })
-	// 	.returning();
-	// return { error: null, data: result[0] };
-	return { error: null, data: {} };
+	if (!response.ok) {
+		throw new Error("Failed to create industry tag");
+	}
+
+	return await response.json();
 }
 
 export async function deleteIndustryTag(id: number) {
-	// const { user } = await useUser();
-	// if (!user) {
-	// 	return { error: "Not authenticated", data: null };
-	// }
-	// await db.delete(industryTags).where(eq(industryTags.id, id));
+	const response = await fetch(`/api/industry-tags/delete/${id}`, {
+		method: "DELETE",
+	});
+	unauthorisedRedirect(response);
+
+	if (!response.ok) {
+		throw new Error("Failed to delete industry tag");
+	}
+
+	return { error: null, data: await response.json() };
 }
 
-export async function getIndustryTags() {
-	// const { user } = await useUser();
-	// if (!user) {
-	// 	return { error: "Not authenticated", data: null };
-	// }
+export async function fetchIndustryTags() {
+	try {
+		const response = await fetch("/api/industry-tags");
+		unauthorisedRedirect(response);
 
-	// return { error: null, data: await db.select().from(industryTags) };
-	return { error: null, data: {} };
+		if (!response.ok) {
+			throw new Error("Failed to fetch industry tags");
+		}
+
+		const data = await response.json();
+		return { error: null, data };
+	} catch (error) {
+		console.error(error);
+		return { error: "Failed to get industry tags", data: null };
+	}
 }

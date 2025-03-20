@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"typecheck": "tsc --noEmit",
-		"dev": "tsx ./lib/server.ts",
+		"dev": "tsx ./server/server.ts",
 		"build": "vite build",
 		"serve": "vite preview",
 		"start": "vite"

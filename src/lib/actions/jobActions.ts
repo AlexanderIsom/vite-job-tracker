@@ -14,11 +14,30 @@ type AddJobResponse = {
 };
 
 export async function addJob(formData: unknown): Promise<AddJobResponse> {
-	// const result = JobSchemaWithTags.safeParse(formData);
+	const result = JobSchemaWithTags.safeParse(formData);
 
-	// if (!result.success) {
-	// 	return { error: "Invalid form data", data: null };
-	// }
+	if (!result.success) {
+		return { error: "Invalid form data", data: null };
+	}
+
+	const response = await fetch(`/api/jobs/create`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(formData),
+	});
+	unauthorisedRedirect(response);
+
+	if (!response.ok) {
+		const data = await response.json();
+		console.log(data);
+		throw new Error("Failed to create job");
+	}
+
+	const data = await response.json();
+
+	return { error: null, data: data };
 
 	// const {
 	// 	company_name,

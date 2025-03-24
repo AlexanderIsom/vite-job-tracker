@@ -1,9 +1,12 @@
 import { Request, Response, Router } from "express";
 import { db } from "../db/config";
-import { jobs } from "../db/schema";
+import { jobs, jobsToIndustryTable, jobToStackTable } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { differenceInDays, startOfDay } from "date-fns";
-import { JobSchemaWithStaleStatusType } from "shared/db/jobSchema";
+import {
+	JobSchemaWithStaleStatusType,
+	JobSchemaWithTags,
+} from "shared/db/jobSchema";
 
 const router = Router();
 
@@ -44,4 +47,63 @@ router.get("/stale", async (req: Request, res: Response) => {
 	res.json(jobsWithStaleStatus);
 });
 
+router.post("/create", async (req: Request, res: Response) => {
+	const result = JobSchemaWithTags.safeParse(req.body);
+
+	if (!result.success) {
+		res.status(400).json({ error: result.error.format(), data: req.body });
+		return;
+	}
+
+	const {
+		company_name,
+		role_title,
+		salary_range,
+		remote,
+		industryTags,
+		stackTags,
+		notes,
+		status,
+	} = result.data;
+
+	const [newJob] = await db
+		.insert(jobs)
+		.values({
+			company_name: company_name,
+			role_title: role_title,
+			salary_range: salary_range,
+			remote: remote,
+			date_applied: new Date(),
+			notes: notes,
+			last_updated: new Date(),
+			status: status,
+		})
+		.returning();
+
+	if (stackTags.length > 0) {
+		await db
+			.insert(jobToStackTable)
+			.values(
+				stackTags.map((tag) => ({
+					jobId: newJob.id,
+					stackTagId: tag.id,
+				}))
+			)
+			.onConflictDoNothing();
+	}
+
+	if (industryTags.length > 0) {
+		await db
+			.insert(jobsToIndustryTable)
+			.values(
+				industryTags.map((tag) => ({
+					jobId: newJob.id,
+					industryTagId: tag.id,
+				}))
+			)
+			.onConflictDoNothing();
+	}
+
+	res.json({ error: null, data: newJob });
+});
 export default router;

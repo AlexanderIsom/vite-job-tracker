@@ -25,7 +25,6 @@ function RouteComponent() {
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const { success, message } = await authService.login(values.password);
-		console.log(success, message)
 	}
 
 	return (
